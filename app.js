@@ -1,4 +1,5 @@
 const express = require('express');
+const bodyParser = require('body-parser')
 const app = express();
 
 const comments = [
@@ -31,6 +32,8 @@ const comments = [
 
 app.use('/public/', express.static('./public/'))
 app.use('/views/', express.static('./views/'))
+app.use(bodyParser.urlencoded({extended:false}))
+app.use(bodyParser.json())
 
 // view engine setup
 app.engine('html', require('express-art-template'));
@@ -45,11 +48,20 @@ app.get('/post', function (req, res) {
     res.render('post.html')
 })
 
-app.get('/comments', function (req, res) {
-    const comment = req.query;
-    comment.dataTime = '2020-11-24';
+// app.get('/comments', function (req, res) {
+//     const comment = req.query;
+//     comment.dataTime = '2020-11-24';
+//     comments.unshift(comment);
+//     //重定向
+//     res.redirect('/')
+// })
+
+//改用post请求
+app.post('/post', function (req, res) {
+    const comment = req.body;
+    comment.dataTime = '2020-12-11';
     comments.unshift(comment);
-    //重定向
+     //重定向
     res.redirect('/')
 })
 
